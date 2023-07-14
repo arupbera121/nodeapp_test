@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: nodejs-ci-pipeline
+spec:
+  workspaces:
+    - name: source
+  tasks:
+    - name: clone-repo
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: source
+      params:
+        - name: url
+          value: https://github.com/arupbera121/nodeapp_test.git
+
+    - name: install-dependencies
+      taskRef:
+        name: nodejs-install-dependencies
+      workspaces:
+        - name: source
+          workspace: source
+
+    - name: run-tests
+      taskRef:
+        name: nodejs-run-tests
+      workspaces:
+        - name: source
+          workspace: source
